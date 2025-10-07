@@ -1,0 +1,31 @@
+{
+  "name": "mediarouter",
+  "version": "1.0.0",
+  "description": "Open Source Video Generation Gateway",
+  "scripts": {
+    "dev": "concurrently \"cd backend && python run.py\" \"cd frontend && npm run dev\"",
+    "dev:backend": "cd backend && python run.py",
+    "dev:frontend": "cd frontend && npm run dev",
+    "setup": "./setup.sh",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:build": "docker-compose build"
+  },
+  "keywords": [
+    "video-generation",
+    "ai",
+    "sora",
+    "runway",
+    "kling",
+    "openai",
+    "fastapi",
+    "react"
+  ],
+  "author": "MediaRouter Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mediarouter.git"
+  }
+}
