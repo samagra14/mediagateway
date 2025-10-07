@@ -44,7 +44,7 @@ MediaRouter provides a unified OpenAI-compatible API for multiple video generati
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/mediarouter.git
+git clone https://github.com/samagra14/mediarouter.git
 cd mediarouter
 
 # Run the setup script
@@ -54,8 +54,10 @@ cd mediarouter
 That's it! The setup script will:
 1. Create necessary directories
 2. Generate secure encryption keys
-3. Build Docker containers
+3. Pull pre-built Docker images
 4. Start all services
+
+**Fast Setup:** Pre-built Docker images are automatically pulled from GitHub Container Registry - no build time required!
 
 Access the application:
 - **Frontend**: http://localhost:3000
@@ -225,7 +227,31 @@ mediarouter/
 
 ## 🛠️ Development
 
-### Backend Development
+### Using Pre-built Images (Recommended)
+
+```bash
+# Pull latest images and start
+docker compose pull
+docker compose up -d
+
+# View logs
+docker compose logs -f
+```
+
+### Building Locally (For Development)
+
+If you want to build from source:
+
+```bash
+# Use the local development compose file
+docker compose -f docker-compose.local.yml up --build
+
+# Or build manually
+docker compose build
+docker compose up -d
+```
+
+### Backend Development (Without Docker)
 
 ```bash
 cd backend
@@ -240,7 +266,7 @@ uvicorn src.main:app --reload --port 3001
 pytest
 ```
 
-### Frontend Development
+### Frontend Development (Without Docker)
 
 ```bash
 cd frontend

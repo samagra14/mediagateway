@@ -15,10 +15,40 @@ export default function Playground() {
   const [currentGeneration, setCurrentGeneration] = useState<VideoGenerationResponse | null>(null);
   const [providers, setProviders] = useState<ProviderInfo[]>([]);
   const [error, setError] = useState('');
+  const [estimatedCost, setEstimatedCost] = useState<number | null>(null);
 
   useEffect(() => {
     loadProviders();
   }, []);
+
+  useEffect(() => {
+    // Estimate cost when parameters change
+    if (selectedModel && duration) {
+      estimateCost();
+    }
+  }, [selectedModel, duration, aspectRatio]);
+
+  const estimateCost = async () => {
+    if (!selectedModel) return;
+
+    try {
+      const response = await fetch('/v1/usage/estimate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: selectedModel,
+          prompt: 'dummy',
+          duration,
+          aspect_ratio: aspectRatio,
+        }),
+      });
+
+      const data = await response.json();
+      setEstimatedCost(data.estimated_cost);
+    } catch (err) {
+      console.error('Failed to estimate cost:', err);
+    }
+  };
 
   const loadProviders = async () => {
     try {
@@ -195,6 +225,20 @@ export default function Playground() {
               />
             </div>
           </div>
+
+          {estimatedCost !== null && (
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">Estimated Cost:</span>
+                <span className="text-lg font-bold text-green-600">
+                  ${estimatedCost.toFixed(4)}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Based on {duration}s video at {aspectRatio} resolution
+              </p>
+            </div>
+          )}
 
           {error && (
             <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">

@@ -331,6 +331,177 @@ def get_usage_stats(db: Session = Depends(get_db)):
     )
 
 
+@router.post("/v1/usage/estimate")
+async def estimate_generation_cost(request: VideoGenerationRequest):
+    """Estimate cost before generating a video.
+
+    Returns cost breakdown and pricing info.
+    """
+    from ..services.cost_calculator import get_cost_calculator
+    from ..providers import get_provider_for_model
+
+    provider_name = request.provider or get_provider_for_model(request.model)
+    cost_calc = get_cost_calculator()
+
+    estimate = cost_calc.estimate_cost(
+        provider=provider_name,
+        model=request.model,
+        duration_seconds=request.duration or 5,
+        aspect_ratio=request.aspect_ratio or "16:9",
+    )
+
+    return {
+        "model": request.model,
+        "provider": provider_name,
+        "duration": request.duration or 5,
+        "aspect_ratio": request.aspect_ratio or "16:9",
+        **estimate,
+    }
+
+
+@router.get("/v1/usage/detailed")
+def get_detailed_usage(
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    provider: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
+    """Get detailed usage statistics with date filtering.
+
+    Query parameters:
+    - start_date: ISO format (YYYY-MM-DD)
+    - end_date: ISO format (YYYY-MM-DD)
+    - provider: Filter by provider
+    """
+    from datetime import datetime as dt
+    from sqlalchemy import func, and_
+
+    query = db.query(Generation)
+
+    # Apply filters
+    filters = []
+    if start_date:
+        try:
+            start_dt = dt.fromisoformat(start_date)
+            filters.append(Generation.created_at >= start_dt)
+        except:
+            pass
+
+    if end_date:
+        try:
+            end_dt = dt.fromisoformat(end_date)
+            filters.append(Generation.created_at <= end_dt)
+        except:
+            pass
+
+    if provider:
+        filters.append(Generation.provider == provider)
+
+    if filters:
+        query = query.filter(and_(*filters))
+
+    # Get all generations
+    generations = query.all()
+
+    # Calculate totals
+    total_cost = sum(g.cost or 0.0 for g in generations)
+    total_duration = sum(g.duration_seconds or 0.0 for g in generations)
+    total_generation_time = sum(g.generation_time or 0.0 for g in generations)
+
+    # Group by date
+    daily_stats = {}
+    for gen in generations:
+        date_key = gen.created_at.date().isoformat()
+        if date_key not in daily_stats:
+            daily_stats[date_key] = {
+                "date": date_key,
+                "count": 0,
+                "cost": 0.0,
+                "duration": 0.0,
+                "success": 0,
+                "failed": 0,
+            }
+
+        daily_stats[date_key]["count"] += 1
+        daily_stats[date_key]["cost"] += gen.cost or 0.0
+        daily_stats[date_key]["duration"] += gen.duration_seconds or 0.0
+
+        if gen.status == GenerationStatus.COMPLETED:
+            daily_stats[date_key]["success"] += 1
+        elif gen.status == GenerationStatus.FAILED:
+            daily_stats[date_key]["failed"] += 1
+
+    # Group by provider
+    provider_stats = {}
+    for gen in generations:
+        prov = gen.provider
+        if prov not in provider_stats:
+            provider_stats[prov] = {
+                "provider": prov,
+                "count": 0,
+                "cost": 0.0,
+                "duration": 0.0,
+                "avg_cost_per_second": 0.0,
+            }
+
+        provider_stats[prov]["count"] += 1
+        provider_stats[prov]["cost"] += gen.cost or 0.0
+        provider_stats[prov]["duration"] += gen.duration_seconds or 0.0
+
+    # Calculate averages
+    for prov_data in provider_stats.values():
+        if prov_data["duration"] > 0:
+            prov_data["avg_cost_per_second"] = prov_data["cost"] / prov_data["duration"]
+
+    return {
+        "summary": {
+            "total_generations": len(generations),
+            "total_cost": round(total_cost, 2),
+            "total_video_duration": round(total_duration, 1),
+            "total_processing_time": round(total_generation_time, 1),
+            "average_cost_per_generation": round(total_cost / len(generations), 4) if generations else 0,
+        },
+        "daily": sorted(daily_stats.values(), key=lambda x: x["date"]),
+        "by_provider": list(provider_stats.values()),
+        "date_range": {
+            "start": start_date,
+            "end": end_date,
+        },
+    }
+
+
+@router.get("/v1/usage/pricing")
+def get_pricing_info():
+    """Get pricing information for all providers and models."""
+    from ..services.cost_calculator import get_cost_calculator
+
+    cost_calc = get_cost_calculator()
+    pricing = cost_calc.get_pricing_info()
+
+    # Format for frontend
+    formatted = []
+    for provider, models in pricing.items():
+        for model, rates in models.items():
+            formatted.append({
+                "provider": provider,
+                "model": model,
+                "per_second": rates["per_second"],
+                "base_cost": rates["base_cost"],
+                "currency": "USD",
+                "examples": {
+                    "5_seconds": round(rates["per_second"] * 5, 2),
+                    "10_seconds": round(rates["per_second"] * 10, 2),
+                    "20_seconds": round(rates["per_second"] * 20, 2),
+                },
+            })
+
+    return {
+        "pricing": formatted,
+        "last_updated": "2025-10-07",
+        "note": "Prices are estimates. Actual costs may vary.",
+    }
+
+
 # Background task for video generation
 async def process_video_generation(
     generation_id: str,
@@ -405,10 +576,39 @@ async def process_video_generation(
 
                     # Extract metadata if available
                     if status.metadata:
-                        generation.width = status.metadata.get("width", 1920)
-                        generation.height = status.metadata.get("height", 1080)
-                        generation.duration_seconds = status.metadata.get("duration", request.duration)
-                        generation.cost = status.metadata.get("cost", 0.0)
+                        # Parse size from metadata (e.g., "1280x720")
+                        size = status.metadata.get("size", "1280x720")
+                        if "x" in str(size):
+                            try:
+                                width, height = map(int, str(size).split("x"))
+                                generation.width = width
+                                generation.height = height
+                            except:
+                                generation.width = 1920
+                                generation.height = 1080
+                        else:
+                            generation.width = 1920
+                            generation.height = 1080
+
+                        # Get duration from metadata or use requested duration
+                        duration_str = status.metadata.get("seconds", str(request.duration))
+                        try:
+                            generation.duration_seconds = float(duration_str)
+                        except:
+                            generation.duration_seconds = request.duration
+
+                    # Calculate cost using the cost calculator
+                    from ..services.cost_calculator import get_cost_calculator
+                    cost_calc = get_cost_calculator()
+
+                    resolution = f"{generation.width}x{generation.height}" if generation.width else None
+                    calculated_cost = cost_calc.calculate_cost(
+                        provider=provider_name,
+                        model=request.model,
+                        duration_seconds=generation.duration_seconds or request.duration,
+                        resolution=resolution
+                    )
+                    generation.cost = calculated_cost
 
                     db.commit()
                 break

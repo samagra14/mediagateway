@@ -50,9 +50,9 @@ echo -e "${BLUE}Creating storage directories...${NC}"
 mkdir -p storage/videos storage/temp
 echo -e "${GREEN}✓${NC} Storage directories created"
 
-# Build and start containers
-echo -e "${BLUE}Building Docker containers...${NC}"
-docker compose build
+# Pull and start containers
+echo -e "${BLUE}Pulling pre-built Docker images...${NC}"
+docker compose pull
 
 echo -e "${BLUE}Starting services...${NC}"
 docker compose up -d

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import Playground from './pages/Playground';
 import Gallery from './pages/Gallery';
 import Settings from './pages/Settings';
+import Usage from './pages/Usage';
 import { Button } from './components/ui/button';
 
 function Navigation() {
@@ -34,6 +35,14 @@ function Navigation() {
                   Gallery
                 </Button>
               </Link>
+              <Link to="/usage">
+                <Button
+                  variant={isActive('/usage') ? 'default' : 'ghost'}
+                  size="sm"
+                >
+                  Usage
+                </Button>
+              </Link>
               <Link to="/settings">
                 <Button
                   variant={isActive('/settings') ? 'default' : 'ghost'}
@@ -58,6 +67,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Playground />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/usage" element={<Usage />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>

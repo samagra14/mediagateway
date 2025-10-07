@@ -1,10 +1,11 @@
 version: '3.8'
 
+# Local development compose file - builds images from source
+# Use this when developing and testing changes
+
 services:
   backend:
-    image: ghcr.io/samagra14/mediarouter-backend:latest
-    # Uncomment to build locally instead of pulling:
-    # build: ./backend
+    build: ./backend
     container_name: mediarouter-backend
     networks:
       - mediarouter-network
@@ -29,9 +30,7 @@ services:
       start_period: 10s
 
   frontend:
-    image: ghcr.io/samagra14/mediarouter-frontend:latest
-    # Uncomment to build locally instead of pulling:
-    # build: ./frontend
+    build: ./frontend
     container_name: mediarouter-frontend
     networks:
       - mediarouter-network
