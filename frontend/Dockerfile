@@ -17,7 +17,6 @@ COPY tailwind.config.js ./
 # Copy source
 COPY src ./src
 COPY index.html ./
-COPY public ./public
 
 # Build
 RUN npm run build
