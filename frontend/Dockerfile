@@ -6,17 +6,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --ignore-scripts
-
-# Copy config files
-COPY tsconfig*.json ./
-COPY vite.config.ts ./
-COPY postcss.config.js ./
-COPY tailwind.config.js ./
+RUN npm install
 
 # Copy source
-COPY src ./src
-COPY index.html ./
+COPY . .
 
 # Build
 RUN npm run build
