@@ -253,8 +253,8 @@ Before deploying:
 
 Images are automatically built and pushed to GitHub Container Registry on every commit to main:
 
-- `ghcr.io/samagra14/mediarouter-backend:latest`
-- `ghcr.io/samagra14/mediarouter-frontend:latest`
+- `ghcr.io/samagra14/mediagateway-backend:latest`
+- `ghcr.io/samagra14/mediagateway-frontend:latest`
 
 **Multi-platform support:** Images are built for both `linux/amd64` and `linux/arm64` (Apple Silicon compatible).
 
@@ -265,7 +265,7 @@ Images are automatically built and pushed to GitHub Container Registry on every 
 docker compose pull
 
 # Use specific version tag
-docker pull ghcr.io/samagra14/mediarouter-backend:v1.0.0
+docker pull ghcr.io/samagra14/mediagateway-backend:v1.0.0
 
 # Build locally instead of pulling
 docker compose -f docker-compose.local.yml up --build

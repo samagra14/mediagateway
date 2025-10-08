@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ghcr.io/samagra14/mediarouter-backend:latest
+    image: ghcr.io/samagra14/mediagateway-backend:latest
     # Uncomment to build locally instead of pulling:
     # build: ./backend
     container_name: mediarouter-backend
@@ -27,7 +27,7 @@ services:
       start_period: 10s
 
   frontend:
-    image: ghcr.io/samagra14/mediarouter-frontend:latest
+    image: ghcr.io/samagra14/mediagateway-frontend:latest
     # Uncomment to build locally instead of pulling:
     # build: ./frontend
     container_name: mediarouter-frontend

@@ -32,16 +32,16 @@ The setup script automatically:
 
 ```bash
 # Latest stable release
-ghcr.io/samagra14/mediarouter-backend:latest
-ghcr.io/samagra14/mediarouter-frontend:latest
+ghcr.io/samagra14/mediagateway-backend:latest
+ghcr.io/samagra14/mediagateway-frontend:latest
 
 # Specific version
-ghcr.io/samagra14/mediarouter-backend:v1.0.0
-ghcr.io/samagra14/mediarouter-frontend:v1.0.0
+ghcr.io/samagra14/mediagateway-backend:v1.0.0
+ghcr.io/samagra14/mediagateway-frontend:v1.0.0
 
 # Main branch (bleeding edge)
-ghcr.io/samagra14/mediarouter-backend:main
-ghcr.io/samagra14/mediarouter-frontend:main
+ghcr.io/samagra14/mediagateway-backend:main
+ghcr.io/samagra14/mediagateway-frontend:main
 ```
 
 ### Platform Support
@@ -101,11 +101,11 @@ Edit `docker-compose.yml` to pin versions:
 ```yaml
 services:
   backend:
-    image: ghcr.io/samagra14/mediarouter-backend:v1.0.0
+    image: ghcr.io/samagra14/mediagateway-backend:v1.0.0
     # ...
 
   frontend:
-    image: ghcr.io/samagra14/mediarouter-frontend:v1.0.0
+    image: ghcr.io/samagra14/mediagateway-frontend:v1.0.0
     # ...
 ```
 
@@ -129,13 +129,13 @@ echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
 # Build and push backend
 cd backend
 docker buildx build --platform linux/amd64,linux/arm64 \
-  -t ghcr.io/samagra14/mediarouter-backend:latest \
+  -t ghcr.io/samagra14/mediagateway-backend:latest \
   --push .
 
 # Build and push frontend
 cd frontend
 docker buildx build --platform linux/amd64,linux/arm64 \
-  -t ghcr.io/samagra14/mediarouter-frontend:latest \
+  -t ghcr.io/samagra14/mediagateway-frontend:latest \
   --push .
 ```
 
@@ -211,7 +211,7 @@ volumes:
 
 ```bash
 # Check connectivity
-docker pull ghcr.io/samagra14/mediarouter-backend:latest
+docker pull ghcr.io/samagra14/mediagateway-backend:latest
 
 # If private, login first
 echo $GITHUB_TOKEN | docker login ghcr.io -u samagra14 --password-stdin
@@ -224,7 +224,7 @@ echo $GITHUB_TOKEN | docker login ghcr.io -u samagra14 --password-stdin
 docker version | grep "OS/Arch"
 
 # Force specific platform (not recommended)
-docker pull --platform linux/amd64 ghcr.io/samagra14/mediarouter-backend:latest
+docker pull --platform linux/amd64 ghcr.io/samagra14/mediagateway-backend:latest
 ```
 
 ### Image Updates Not Pulling
