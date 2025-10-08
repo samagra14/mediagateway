@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Local development compose file - builds images from source
 # Use this when developing and testing changes
 

@@ -37,10 +37,10 @@ MediaRouter provides a unified OpenAI-compatible API for multiple video generati
 
 ### Prerequisites
 
-- Docker and Docker Compose installed
+- Docker and Docker Compose installed ([Install Docker](https://docs.docker.com/get-docker/))
 - API keys from your chosen providers ([Get API Keys](#getting-api-keys))
 
-### Installation
+### Installation (30 seconds!)
 
 ```bash
 # Clone the repository
@@ -52,17 +52,25 @@ cd mediarouter
 ```
 
 That's it! The setup script will:
-1. Create necessary directories
-2. Generate secure encryption keys
-3. Pull pre-built Docker images
-4. Start all services
+1. ✅ Create necessary directories
+2. ✅ Generate secure encryption keys
+3. ✅ Pull pre-built Docker images (no build time!)
+4. ✅ Start all services
 
-**Fast Setup:** Pre-built Docker images are automatically pulled from GitHub Container Registry - no build time required!
+**⚡ Fast Setup:** Pre-built Docker images are automatically pulled from GitHub Container Registry - **no build time required!**
 
-Access the application:
-- **Frontend**: http://localhost:3000
+### Access the Application
+
+- **Frontend UI**: http://localhost:3000
 - **Backend API**: http://localhost:3001
-- **API Docs**: http://localhost:3001/docs
+- **API Documentation**: http://localhost:3001/docs
+
+### First-Time Setup
+
+1. Open http://localhost:3000
+2. Go to **Settings** page
+3. Add your API keys for desired providers (OpenAI, Runway, or Kling)
+4. Start generating videos in the **Playground**!
 
 ### Manual Setup (Without Docker)
 
@@ -329,13 +337,32 @@ class NewProvider(VideoProvider):
 
 ## 🐛 Troubleshooting
 
+### Cannot Pull Docker Images
+
+If you see "denied" errors when pulling images:
+
+```bash
+# The images might not be public yet, or the build is still running
+# Check build status: https://github.com/samagra14/mediagateway/actions
+
+# Option 1: Wait for the build to complete, then try again
+docker compose pull
+
+# Option 2: Build locally instead
+docker compose -f docker-compose.local.yml up --build
+```
+
 ### Port Already in Use
 
 ```bash
 # Stop existing containers
-docker-compose down
+docker compose down
 
-# Or use different ports in docker-compose.yml
+# Check what's using the ports
+lsof -i :3000  # Frontend
+lsof -i :3001  # Backend
+
+# Or change ports in docker-compose.yml
 ```
 
 ### Database Issues
@@ -345,15 +372,30 @@ docker-compose down
 rm storage/db.sqlite
 
 # Restart backend
-docker-compose restart backend
+docker compose restart backend
 ```
 
 ### Video Generation Stuck
 
 - Check provider API status
 - Verify API key validity in Settings
-- Check backend logs: `docker-compose logs backend`
+- Check backend logs: `docker compose logs -f backend`
 - Some providers have rate limits
+- Sora may require waitlist approval
+
+### Services Not Starting
+
+```bash
+# Check logs
+docker compose logs
+
+# Restart everything
+docker compose down
+docker compose up -d
+
+# Check service health
+docker compose ps
+```
 
 ## 📊 Usage Statistics
 
