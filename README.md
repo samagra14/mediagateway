@@ -1,14 +1,47 @@
-# MediaRouter 🎬
+<div align="center">
 
-> Open Source Video Generation Gateway - A unified API for multiple AI video generation providers
+# 🎬 MediaRouter
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green.svg)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
+### Open Source Video Generation Gateway
 
-MediaRouter provides a unified OpenAI-compatible API for multiple video generation providers, with a beautiful playground UI for testing and experimentation. Use your own API keys (BYOK), maintain full control of your data, and run everything locally.
+**A unified API for multiple AI video generation providers**
 
-> **🎉 New**: OpenAI's Sora 2 API is now available! Generate videos with synced audio for $0.10/second.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/samagra14/mediagateway?style=social)](https://github.com/samagra14/mediagateway)
+[![Docker Pulls](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://github.com/samagra14/mediagateway/pkgs/container/mediagateway-backend)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-18.2-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+[Features](#-features) • [Quick Start](#-quick-start) • [Screenshots](#-screenshots) • [Documentation](#-documentation) • [Contributing](#-contributing)
+
+</div>
+
+---
+
+## 🌟 Why MediaRouter?
+
+**Own Your Video Generation Stack** - MediaRouter is the only 100% open source video generation gateway that gives you:
+
+- 🔓 **No Vendor Lock-in**: Switch between Sora, Runway, Kling, and more with a single API
+- 🔑 **Bring Your Own Keys**: Your API keys, your data, your control
+- 💰 **Cost Transparency**: Real-time cost tracking across all providers
+- 🏠 **Run Anywhere**: Docker-based deployment in 30 seconds
+- 🛠️ **Fully Customizable**: Add your own providers, modify workflows, extend functionality
+
+> **🎉 Latest**: OpenAI's Sora 2 API support with synced audio generation!
+
+### The Open Source Advantage
+
+Unlike proprietary solutions, MediaRouter gives you:
+- ✅ Complete source code access
+- ✅ Self-hosted deployment
+- ✅ No usage limits or restrictions
+- ✅ Community-driven development
+- ✅ MIT licensed - use it anywhere
 
 ## ✨ Features
 
@@ -35,42 +68,42 @@ MediaRouter provides a unified OpenAI-compatible API for multiple video generati
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Docker and Docker Compose installed ([Install Docker](https://docs.docker.com/get-docker/))
-- API keys from your chosen providers ([Get API Keys](#getting-api-keys))
-
-### Installation (30 seconds!)
+Get MediaRouter running in **3 commands**:
 
 ```bash
-# Clone the repository
-git clone https://github.com/samagra14/mediarouter.git
-cd mediarouter
-
-# Run the setup script
+git clone https://github.com/samagra14/mediagateway.git
+cd mediagateway
 ./setup.sh
 ```
 
-That's it! The setup script will:
-1. ✅ Create necessary directories
-2. ✅ Generate secure encryption keys
-3. ✅ Pull pre-built Docker images (no build time!)
-4. ✅ Start all services
+**That's it! ⚡** The script automatically:
+- ✅ Pulls pre-built Docker images (no build time!)
+- ✅ Generates secure encryption keys
+- ✅ Creates storage directories
+- ✅ Starts all services
 
-**⚡ Fast Setup:** Pre-built Docker images are automatically pulled from GitHub Container Registry - **no build time required!**
+**Setup time: ~30 seconds**
 
-### Access the Application
+### 🎯 Next Steps
 
-- **Frontend UI**: http://localhost:3000
-- **Backend API**: http://localhost:3001
-- **API Documentation**: http://localhost:3001/docs
+1. **Open** http://localhost:3000
+2. **Add API Keys** → Go to Settings → Add your provider keys
+3. **Generate Videos** → Go to Playground → Enter a prompt → Generate!
 
-### First-Time Setup
+That's it! You're ready to create videos.
 
-1. Open http://localhost:3000
-2. Go to **Settings** page
-3. Add your API keys for desired providers (OpenAI, Runway, or Kling)
-4. Start generating videos in the **Playground**!
+### 📍 Access Points
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| **Frontend** | http://localhost:3000 | Beautiful web interface |
+| **Backend API** | http://localhost:3001 | REST API endpoint |
+| **API Docs** | http://localhost:3001/docs | Interactive API documentation |
+
+### 📋 Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) installed
+- API keys from [supported providers](#getting-api-keys)
 
 ### Manual Setup (Without Docker)
 
@@ -397,6 +430,24 @@ docker compose up -d
 docker compose ps
 ```
 
+## 📸 Screenshots
+
+### Playground - Generate Videos
+![Playground](./assets/playground_final.png)
+*Generate videos with any provider using a beautiful, intuitive interface*
+
+### Gallery - Manage Your Videos
+![Gallery](./assets/gallery.png)
+*Browse, filter, and manage all your generated videos in one place*
+
+### Usage Analytics - Track Costs
+![Usage Analytics](./assets/usage.png)
+*Monitor spending, generation times, and success rates across all providers*
+
+### Settings - Manage API Keys
+![Settings](./assets/settings.png)
+*Securely add and manage API keys for multiple providers*
+
 ## 📊 Usage Statistics
 
 View detailed usage statistics in the Settings page:
@@ -407,54 +458,98 @@ View detailed usage statistics in the Settings page:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+We love contributions! MediaRouter is built by the community, for the community.
+
+### Ways to Contribute
+
+- 🐛 Report bugs and issues
+- 💡 Suggest new features or providers
+- 📝 Improve documentation
+- 🔧 Submit pull requests
+- ⭐ Star the repo to show support
+
+### Quick Start for Contributors
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes
+4. Test locally with `docker compose -f docker-compose.local.yml up --build`
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ### Development Guidelines
 
-- Follow existing code style
+- Follow existing code style (FastAPI for backend, React for frontend)
 - Add tests for new features
 - Update documentation
-- Ensure all tests pass
+- Ensure Docker builds succeed
+- Add provider integrations using the `VideoProvider` interface
+
+See [CLAUDE.md](CLAUDE.md) for detailed development guide.
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+**What this means:**
+- ✅ Commercial use allowed
+- ✅ Modification allowed
+- ✅ Distribution allowed
+- ✅ Private use allowed
+- ❌ No warranty provided
+- ❌ No liability accepted
 
-- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
-- [React](https://reactjs.org/) - UI library
-- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+## 🌟 Support the Project
 
-## 📞 Support
+If MediaRouter is helpful to you:
 
-- 📧 Email: support@mediarouter.dev
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/mediarouter/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/mediarouter/discussions)
+- ⭐ **Star this repo** - It helps others discover the project
+- 🐦 **Share on social media** - Spread the word
+- 💬 **Join discussions** - Share your use cases and ideas
+- 🤝 **Contribute** - Code, docs, or ideas welcome
+- 🐛 **Report bugs** - Help us improve
+
+## 📞 Community & Support
+
+- 🐛 **Issues**: [GitHub Issues](https://github.com/samagra14/mediagateway/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/samagra14/mediagateway/discussions)
+- 📖 **Documentation**: [Full Documentation](./CLAUDE.md)
 
 ## 🗺️ Roadmap
 
+### Coming Soon
 - [ ] Additional providers (Pika, Luma, Haiper)
 - [ ] Image-to-video support
 - [ ] Video-to-video transformations
 - [ ] Batch generation
 - [ ] Webhook notifications
-- [ ] Cost estimation before generation
-- [ ] Public benchmarking dashboard
 - [ ] CLI tool
 - [ ] Python/TypeScript SDKs
 
-## ⭐ Star History
+### Completed ✅
+- [x] Sora 2 API integration
+- [x] Runway Gen-3/Gen-4 support
+- [x] Kling AI v1.5 support
+- [x] Usage tracking and analytics
+- [x] Pre-built Docker images
+- [x] OpenAI-compatible API
 
-If you find MediaRouter useful, please consider giving it a star on GitHub!
+## 🙏 Acknowledgments
+
+Built with amazing open source technologies:
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
+- [React](https://reactjs.org/) - UI library
+- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
+- [Docker](https://www.docker.com/) - Containerization
 
 ---
 
+<div align="center">
+
 **Built with ❤️ by the open source community**
+
+[⬆ Back to Top](#-mediarouter)
+
+</div>
